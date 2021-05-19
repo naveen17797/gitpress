@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db-data-${WORDPRESS_VERSION:-5.5.0}:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: password
+
+  wordpress:
+    image: naveen17797/gitpress:0.0.4
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html/wp-content/plugins/gitpress
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: cd
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+volumes:
+  db-data-5.5.0:
+  wordpress-data-5.5.0:
