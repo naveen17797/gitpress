@@ -1,0 +1,10 @@
+.gitpress-sync {
+    background-color: #f34f29;
+    color: white;
+    padding: 0 5px 0 5px !important;
+}
+
+.gitpress-sync-warning {
+    background-color: #957000;
+    color: white;
+}
