@@ -12,7 +12,7 @@ services:
       MYSQL_PASSWORD: password
 
   wordpress:
-    image: naveen17797/gitpress:0.0.9
+    image: naveen17797/gitpress:0.1.0
     depends_on:
       - db
     volumes:
