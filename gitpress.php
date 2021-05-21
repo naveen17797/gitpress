@@ -10,7 +10,10 @@ License: GPL2
 */
 
 use Gitpress\AdminBar\AdminBar;
+
 use Gitpress\Notification\Notification;
+use Gitpress\Pages\Config\ConfigPage;
+
 
 add_action( 'init', function () {
 	require_once __DIR__ . '/configuration.php';
@@ -37,6 +40,7 @@ spl_autoload_register(function ($class) {
 
 new Notification();
 new AdminBar();
+new ConfigPage();
 
 
 
