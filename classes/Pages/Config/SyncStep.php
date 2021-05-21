@@ -2,7 +2,7 @@
 
 namespace Gitpress\Pages\Config;
 
-class CloneRepositoryStep implements Step {
+class SyncStep implements Step {
 
 
 	public function render_page() {
@@ -14,15 +14,27 @@ class CloneRepositoryStep implements Step {
 		$url      = "$username.$host.io";
 
 		?>
-        <h3>Cloning <?php echo $url; ?> </h3>
+        <h3>Syncing site to  <?php echo $url; ?> </h3>
 
 
 		<?php
 
-		if ( ! is_dir( "/var/www/html/$url/" ) ) {
-			$this->exec( "su root" );
-			$repo_url = "https://github.com/$username/$url";
-			$this->exec( "cd /var/www/html/ && git clone $repo_url" );
+        add_filter('ss_local_dir', function () use ($url) {
+            return "/var/www/html/$url/";
+        });
+
+		add_filter('gitpress_config_ss_delivery_method', function () use ($url) {
+			return "local";
+		});
+
+
+		if ( is_dir( "/var/www/html/$url/" ) ) {
+		    // Generate static files put it on /var/www/html/foldername
+			$instance = get_ss_instance();
+			$instance->archive_creation_job->start();
+		}
+		else {
+		    echo  "Failed";
 		}
 
 		?>

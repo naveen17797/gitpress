@@ -104,9 +104,9 @@ class Util {
 	 */
 	public static function debug_log( $object = null ) {
 		$options = Options::instance();
-		if ( $options->get( 'debugging_mode' ) !== '1' ) {
-			return;
-		}
+//		if ( $options->get( 'debugging_mode' ) !== '1' ) {
+//			return;
+//		}
 
 		$debug_file = self::get_debug_log_filename();
 
@@ -128,7 +128,7 @@ class Util {
 		$contents = preg_replace( "/\r|\n/", "", $contents );
 
 		$message .= $contents . "\n";
-
+		echo "<code>$message</code>";
 		// log the message to the debug file instead of the usual error_log location
 		error_log( $message, 3, $debug_file );
 	}

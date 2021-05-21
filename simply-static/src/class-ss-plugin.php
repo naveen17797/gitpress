@@ -44,7 +44,7 @@ class Plugin {
 	 * Archive creation process
 	 * @var Simply_Static\Archive_Creation_Job
 	 */
-	protected $archive_creation_job = null;
+	public $archive_creation_job = null;
 
 	/**
 	 * Current page name
@@ -81,27 +81,27 @@ class Plugin {
 			self::$instance->includes();
 
 			// Load the text domain for i18n
-			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
+			//add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 			// Enqueue admin styles
-			add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_styles' ) );
+			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_styles' ) );
 			// Enqueue admin scripts
-			add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_scripts' ) );
+			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_scripts' ) );
 			// Add the options page and menu item.
-			add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
+			//add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
 
 			// Handle AJAX requests
-			add_action( 'wp_ajax_static_archive_action', array( self::$instance, 'static_archive_action' ) );
-			add_action( 'wp_ajax_render_export_log', array( self::$instance, 'render_export_log' ) );
-			add_action( 'wp_ajax_render_activity_log', array( self::$instance, 'render_activity_log' ) );
+			//add_action( 'wp_ajax_static_archive_action', array( self::$instance, 'static_archive_action' ) );
+			//add_action( 'wp_ajax_render_export_log', array( self::$instance, 'render_export_log' ) );
+			//add_action( 'wp_ajax_render_activity_log', array( self::$instance, 'render_activity_log' ) );
 
 			// Instead of using ajax, activate export log file and run with cron.
-			add_action( 'simply_static_site_export_cron', array( self::$instance, 'run_static_export_with_cron' ) );
+			//add_action( 'simply_static_site_export_cron', array( self::$instance, 'run_static_export_with_cron' ) );
 
 			// Filters
-			add_filter( 'admin_footer_text', array( self::$instance, 'filter_admin_footer_text' ), 15 );
-			add_filter( 'update_footer', array( self::$instance, 'filter_update_footer' ), 15 );
-			add_filter( 'http_request_args', array( self::$instance, 'wpbp_http_request_args' ), 10, 2 );
-			add_filter( 'simplystatic.archive_creation_job.task_list', array( self::$instance, 'filter_task_list' ), 10, 2 );
+			//add_filter( 'admin_footer_text', array( self::$instance, 'filter_admin_footer_text' ), 15 );
+			//add_filter( 'update_footer', array( self::$instance, 'filter_update_footer' ), 15 );
+			//add_filter( 'http_request_args', array( self::$instance, 'wpbp_http_request_args' ), 10, 2 );
+			//add_filter( 'simplystatic.archive_creation_job.task_list', array( self::$instance, 'filter_task_list' ), 10, 2 );
 
 			self::$instance->options = Options::instance();
 			self::$instance->view = new View();
@@ -257,9 +257,9 @@ class Plugin {
 			Util::debug_log( "Received request to start generating a static archive" );
 
 			if ( DISABLE_WP_CRON !== true ) {
-				if ( ! wp_next_scheduled( 'simply_static_site_export_cron' ) ) {
-					wp_schedule_single_event( time(), 'simply_static_site_export_cron' );
-				}
+//				if ( ! wp_next_scheduled( 'simply_static_site_export_cron' ) ) {
+//					wp_schedule_single_event( time(), 'simply_static_site_export_cron' );
+//				}
 			} else {
 				// Cron is unavaiable.
 				$this->archive_creation_job->start();

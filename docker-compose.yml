@@ -13,13 +13,15 @@ services:
 
   wordpress:
     image: naveen17797/gitpress:0.1.0
+    ports:
+      - 8080:80
     depends_on:
       - db
     volumes:
       - ./:/var/www/html/wp-content/plugins/gitpress
     environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: cd
+      WORDPRESS_DB_HOST: localhost
+      WORDPRESS_DB_USER: username
       WORDPRESS_DB_PASSWORD: password
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DEBUG: 1

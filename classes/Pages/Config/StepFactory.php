@@ -10,6 +10,9 @@ class StepFactory {
 		if ( $_GET['step'] === 'clone-step') {
 			return new CloneRepositoryStep();
 		}
+		else if ( $_GET['step'] === 'sync-step') {
+			return new SyncStep();
+		}
 		return new RepositoryCheckStep();
 	}
 
