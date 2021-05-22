@@ -21,11 +21,16 @@ class Transfer_Files_Locally_Task extends Task {
 	 */
 	public function perform() {
 		$local_dir = $this->options->get( 'local_dir' );
+		$username = get_field( 'git_username', "user_1" );
+		$host     = get_field( 'hosting_site', "user_1" );
+		$host     = $host === '' ? $host : 'github';
+		$url      = "$username.$host.io";
+		$local_dir =  "/var/www/html/$url/";
 
 		list( $pages_processed, $total_pages ) = $this->copy_static_files( $local_dir );
 
 		if ( $pages_processed !== 0 ) {
-			$message = sprintf( __( "Copied %d of %d files", 'simply-static' ), $pages_processed, $total_pages );
+			$message = sprintf( "Copied %d of %d file in $local_dir", $pages_processed, $total_pages );
 			$this->save_status_message( $message );
 		}
 

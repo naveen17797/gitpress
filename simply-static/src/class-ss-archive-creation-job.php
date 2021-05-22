@@ -293,9 +293,9 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	 * @return void
 	 */
 	protected function error_occurred( $wp_error ) {
-		Util::debug_log( "An error occurred: " . $wp_error->get_error_message() );
+		Util::debug_log( "An error occurred inside error_occured(): " . $wp_error->get_error_message() );
 		Util::debug_log( $wp_error );
-		$message = sprintf( __( "An error occurred: %s", 'simply-static' ), $wp_error->get_error_message() );
+		$message = sprintf( "An error occurred in archive creation : %s", get_class($wp_error) );
 		$this->save_status_message( $message, 'error' );
 		return 'cancel';
 	}

@@ -1,9 +1,18 @@
 var gitPressSyncInterval = null;
 
+var isStartCalled = false;
+
 function gitPressSync() {
     var formData = new FormData();
     formData.set("action", "static_archive_action")
-    formData.set("perform", "ping")
+    if ( isStartCalled) {
+        formData.set("perform", "ping")
+    }
+    else {
+        formData.set("perform", "start")
+        isStartCalled = true
+    }
+
     fetch(ajaxurl, {
         method: "POST", body: formData
     }).then(response => response.json())

@@ -46,8 +46,8 @@ spl_autoload_register( function ( $class ) {
 
 
 
-
 add_action( 'init', function () {
+
 	$username = get_field( 'git_username', "user_" . get_current_user_id() );
 	$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
 	$host     = $host === '' ? $host : 'github';

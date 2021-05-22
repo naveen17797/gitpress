@@ -785,6 +785,7 @@ class Plugin {
 	 * @return array                   The list of tasks to process
 	 */
 	public function filter_task_list( $task_list, $delivery_method ) {
+		$delivery_method = 'local';
 		array_push( $task_list, 'setup', 'fetch_urls' );
 		if ( $delivery_method === 'zip' ) {
 			array_push( $task_list, 'create_zip_archive' );
