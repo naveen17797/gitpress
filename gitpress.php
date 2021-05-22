@@ -13,6 +13,7 @@ use Gitpress\AdminBar\AdminBar;
 
 use Gitpress\Notification\Notification;
 use Gitpress\Pages\Config\ConfigPage;
+
 require_once __DIR__ . "/simply-static/simply-static.php";
 
 
@@ -45,7 +46,6 @@ spl_autoload_register( function ( $class ) {
 } );
 
 
-
 add_action( 'init', function () {
 
 	$username = get_field( 'git_username', "user_" . get_current_user_id() );
@@ -66,9 +66,69 @@ add_action( 'init', function () {
 	new ConfigPage();
 
 
+} );
 
+function runCommand( $bin, $command = '', $force = true ) {
+	$stream = null;
+	$bin    .= $force ? ' 2>&1' : '';
+
+	$descriptorSpec = array
+	(
+		0 => array( 'pipe', 'r' ),
+		1 => array( 'pipe', 'w' )
+	);
+
+	$process = proc_open( $bin, $descriptorSpec, $pipes );
+
+	if ( is_resource( $process ) ) {
+		fwrite( $pipes[0], $command );
+		fclose( $pipes[0] );
+
+		$stream = stream_get_contents( $pipes[1] );
+		fclose( $pipes[1] );
+
+		proc_close( $process );
+	}
+
+	return $stream;
+}
+
+
+add_action( 'wp_ajax_gitpress_commit_changes', function () {
+	$username = get_field( 'git_username', "user_" . get_current_user_id() );
+	$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
+	$password = get_field( 'git_password', "user_" . get_current_user_id() );
+	$host     = $host === '' ? $host : 'github';
+	$url      = "$username.$host.io";
+	$dir      = "/var/www/html/$url/";
+	$date     = date( 'Y-m-d h:i:s' );
+
+
+	wp_send_json_success( array(
+		'activity_log_html' => $dir . runCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+		                       . runCommand( "git -C $dir config user.name $username" )
+		                       . runCommand( "git -C $dir config user.password $password" )
+		                       . runCommand( "git -C $dir add ." )
+		                       . runCommand( "cd $dir" ) . runCommand( "git -C $dir commit -am 'saving changes on $date'" )
+	) );
 } );
 
 
-
+add_action( 'wp_ajax_gitpress_push', function () {
+	$username = get_field( 'git_username', "user_" . get_current_user_id() );
+	$password = get_field( 'git_password', "user_" . get_current_user_id() );
+	$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
+	$host     = $host === '' ? $host : 'github';
+	$url      = "$username.$host.io";
+	$dir      = "/var/www/html/$url/";
+	wp_send_json_success( array(
+		'activity_log_html' =>
+			runCommand("git -C $dir remote rm origin").
+			runCommand("git -C $dir remote add origin https://$password@$host.com/$username/$url").
+			runCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+		                       . runCommand( "git -C $dir config user.name $username" )
+		                       . runCommand( "git -C $dir config user.password $password" ) .
+		                       runCommand( "git -C $dir push origin master" )
+	) );
+} );
 

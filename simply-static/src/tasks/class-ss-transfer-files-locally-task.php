@@ -21,6 +21,7 @@ class Transfer_Files_Locally_Task extends Task {
 	 */
 	public function perform() {
 		$local_dir = $this->options->get( 'local_dir' );
+		// God wont forgive me for this.
 		$username = get_field( 'git_username', "user_1" );
 		$host     = get_field( 'hosting_site', "user_1" );
 		$host     = $host === '' ? $host : 'github';
