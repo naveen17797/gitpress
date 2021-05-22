@@ -65,7 +65,7 @@ class Transfer_Files_Locally_Task extends Task {
 		$static_pages = Page::query()
 			->where( "file_path IS NOT NULL" )
 			->where( "file_path != ''" )
-			->where( "( last_transferred_at < ? OR last_transferred_at IS NULL )", $archive_start_time )
+//			->where( "( last_transferred_at < ? OR last_transferred_at IS NULL )", $archive_start_time )
 			->limit( $batch_size )
 			->find();
 		$pages_remaining = count( $static_pages );
