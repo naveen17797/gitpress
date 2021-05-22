@@ -22,9 +22,6 @@ class Setup_Task extends Task {
 		$message = __( 'Setting up', 'simply-static' );
 		$this->save_status_message( $message );
 
-		// Delete files in temp dir.
-		$this->delete_temp_static_files();
-
 		$archive_dir = $this->options->get_archive_dir();
 
 		// create temp archive directory.
@@ -39,25 +36,19 @@ class Setup_Task extends Task {
 		// TODO: Add a way for the user to perform this, optionally, so that we
 		// don't need to do it every time. Then enable the two commented-out
 		// sections below.
-		$options = get_option( 'simply-static' );
-
-		if ( empty( $options['use-build'] ) ) {
-			Page::query()->delete_all();
-		}
+		Page::query()->delete_all();
 
 		// clear out any saved error messages on pages
 		//Page::query()
-		//->update_all( 'error_message', null );
+		// ->update_all( 'error_message', null );
 
 		// delete pages that we can't process
 		//Page::query()
-		//->where( 'http_status_code IS NULL OR http_status_code NOT IN (?)', implode( ',', Page::$processable_status_codes ) )
-		//->delete_all();
+		// ->where( 'http_status_code IS NULL OR http_status_code NOT IN (?)', implode( ',', Page::$processable_status_codes ) )
+		// ->delete_all();
 
 		// add origin url and additional urls/files to database.
-		$additional_urls = $this->options->get( 'additional_urls' );
-
-		self::add_origin_and_additional_urls_to_db( $additional_urls );
+		self::add_origin_and_additional_urls_to_db( $this->options->get( 'additional_urls' ) );
 		self::add_additional_files_to_db( $this->options->get( 'additional_files' ) );
 
 		return true;
@@ -149,34 +140,5 @@ class Setup_Task extends Task {
 			$url = str_replace( untrailingslashit( get_home_path() ), Util::origin_url(), $path );
 		}
 		return $url;
-	}
-
-	/**
-	 * Delete temporary, generated static files.
-	 *
-	 * @return true|\WP_Error True on success, WP_Error otherwise.
-	 */
-	public function delete_temp_static_files() {
-		$options = Options::instance();
-		$dir     = $options->get( 'temp_files_dir' );
-
-		if ( false === file_exists( $dir ) ) {
-			return false;
-		}
-
-		$files = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $dir, \RecursiveDirectoryIterator::SKIP_DOTS ), \RecursiveIteratorIterator::CHILD_FIRST );
-
-		foreach ( $files as $fileinfo ) {
-			if ( $fileinfo->isDir() ) {
-				if ( false === rmdir( $fileinfo->getRealPath() ) ) {
-					return false;
-				}
-			} else {
-				if ( false === unlink( $fileinfo->getRealPath() ) ) {
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 }

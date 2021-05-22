@@ -85,11 +85,9 @@ namespace Simply_Static;
 							<select name='delivery_method' id='deliveryMethod'>
 								<option value='zip' <?php Util::selected_if( $this->delivery_method === 'zip' ) ?>><?php _e( "ZIP Archive", 'simply-static' ); ?></option>
 								<option value='local' <?php Util::selected_if( $this->delivery_method === 'local' ) ?>><?php _e( "Local Directory", 'simply-static' ); ?></option>
-								<?php do_action( 'simply_static_delivery_methods' ); ?>
 							</select>
 						</td>
 					</tr>
-					<?php do_action( 'simply_static_delivery_method_description' ); ?>
 					<tr class='delivery-method zip'>
 						<th></th>
 						<td>
@@ -235,6 +233,18 @@ namespace Simply_Static;
 								<p><?php _e( "Specify the directory to save your temporary files. This directory must exist and be writeable.", 'simply-static' ); ?></p>
 								<p><?php echo sprintf( __( "Default: <code>%s</code>", 'simply-static' ), $example_temp_files_dir ); ?></p>
 							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<label><?php _e( "Delete Temporary Files", 'simply-static' ); ?></label>
+						</th>
+						<td>
+							<label>
+								<input name='delete_temp_files' value='0' type='hidden' />
+								<input aria-describedby='deleteTempFilesHelpBlock' name='delete_temp_files' id='deleteTempFiles' value='1' type='checkbox' <?php Util::checked_if( $this->delete_temp_files === '1' ); ?> />
+								<?php _e( "Delete temporary files at the end of the job", 'simply-static' ); ?>
+							</label>
 						</td>
 					</tr>
 				</tbody>

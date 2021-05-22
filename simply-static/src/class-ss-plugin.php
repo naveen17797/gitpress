@@ -44,7 +44,7 @@ class Plugin {
 	 * Archive creation process
 	 * @var Simply_Static\Archive_Creation_Job
 	 */
-	public $archive_creation_job = null;
+	protected $archive_creation_job = null;
 
 	/**
 	 * Current page name
@@ -81,27 +81,27 @@ class Plugin {
 			self::$instance->includes();
 
 			// Load the text domain for i18n
-			//add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
+			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 			// Enqueue admin styles
-			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_styles' ) );
+			add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_styles' ) );
 			// Enqueue admin scripts
-			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_scripts' ) );
+			add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_scripts' ) );
 			// Add the options page and menu item.
-			//add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
+			add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
 
 			// Handle AJAX requests
-			//add_action( 'wp_ajax_static_archive_action', array( self::$instance, 'static_archive_action' ) );
-			//add_action( 'wp_ajax_render_export_log', array( self::$instance, 'render_export_log' ) );
-			//add_action( 'wp_ajax_render_activity_log', array( self::$instance, 'render_activity_log' ) );
+			add_action( 'wp_ajax_static_archive_action', array( self::$instance, 'static_archive_action' ) );
+			add_action( 'wp_ajax_render_export_log', array( self::$instance, 'render_export_log' ) );
+			add_action( 'wp_ajax_render_activity_log', array( self::$instance, 'render_activity_log' ) );
 
 			// Instead of using ajax, activate export log file and run with cron.
-			//add_action( 'simply_static_site_export_cron', array( self::$instance, 'run_static_export_with_cron' ) );
+			add_action( 'simply_static_site_export_cron', array( self::$instance, 'run_static_export_with_cron' ) );
 
 			// Filters
-			//add_filter( 'admin_footer_text', array( self::$instance, 'filter_admin_footer_text' ), 15 );
-			//add_filter( 'update_footer', array( self::$instance, 'filter_update_footer' ), 15 );
-			//add_filter( 'http_request_args', array( self::$instance, 'wpbp_http_request_args' ), 10, 2 );
-			//add_filter( 'simplystatic.archive_creation_job.task_list', array( self::$instance, 'filter_task_list' ), 10, 2 );
+			add_filter( 'admin_footer_text', array( self::$instance, 'filter_admin_footer_text' ), 15 );
+			add_filter( 'update_footer', array( self::$instance, 'filter_update_footer' ), 15 );
+			add_filter( 'http_request_args', array( self::$instance, 'wpbp_http_request_args' ), 10, 2 );
+			add_filter( 'simplystatic.archive_creation_job.task_list', array( self::$instance, 'filter_task_list' ), 10, 2 );
 
 			self::$instance->options = Options::instance();
 			self::$instance->view = new View();
@@ -131,6 +131,7 @@ class Plugin {
 				self::$instance->options->set( 'urls_to_exclude', $urls_to_exclude );
 			}
 		}
+
 		return self::$instance;
 	}
 
@@ -255,14 +256,8 @@ class Plugin {
 		if ( $action === 'start' ) {
 			Util::delete_debug_log();
 			Util::debug_log( "Received request to start generating a static archive" );
-
-			if ( DISABLE_WP_CRON !== true ) {
-//				if ( ! wp_next_scheduled( 'simply_static_site_export_cron' ) ) {
-//					wp_schedule_single_event( time(), 'simply_static_site_export_cron' );
-//				}
-			} else {
-				// Cron is unavaiable.
-				$this->archive_creation_job->start();
+			if ( ! wp_next_scheduled( 'simply_static_site_export_cron' ) ) {
+				wp_schedule_single_event( time(), 'simply_static_site_export_cron' );
 			}
 		} else if ( $action === 'cancel' ) {
 			Util::debug_log( "Received request to cancel static archive generation" );
@@ -326,22 +321,18 @@ class Plugin {
 			die( __( 'Not permitted', 'simply-static' ) );
 		}
 
-		$per_page     = $_POST['per_page'];
+		$per_page = $_POST['per_page'];
 		$current_page = $_POST['page'];
-		$offset       = ( intval( $current_page ) - 1 ) * intval( $per_page );
+		$offset = ( intval( $current_page ) - 1 ) * intval( $per_page );
 
-		$static_pages = apply_filters(
-			'ss_total_pages_log',
-			Page::query()
+		$static_pages = Page::query()
 			->limit( $per_page )
 			->offset( $offset )
 			->order( 'http_status_code' )
-			->find(),
-		);
-
-		$http_status_codes  = Page::get_http_status_codes_summary();
+			->find();
+		$http_status_codes = Page::get_http_status_codes_summary();
 		$total_static_pages = array_sum( array_values( $http_status_codes ) );
-		$total_pages        = ceil( $total_static_pages / $per_page );
+		$total_pages = ceil( $total_static_pages / $per_page );
 
 		$content = $this->view
 			->set_template( '_export_log' )
@@ -396,6 +387,7 @@ class Plugin {
 			->assign( 'urls_to_exclude', $this->options->get( 'urls_to_exclude' ) )
 			->assign( 'delivery_method', $this->options->get( 'delivery_method' ) )
 			->assign( 'local_dir', $this->options->get( 'local_dir' ) )
+			->assign( 'delete_temp_files', $this->options->get( 'delete_temp_files' ) )
 			->assign( 'destination_url_type', $this->options->get( 'destination_url_type' ) )
 			->assign( 'relative_path', $this->options->get( 'relative_path' ) )
 			->assign( 'http_basic_auth_digest', $this->options->get( 'http_basic_auth_digest' ) )
@@ -491,6 +483,7 @@ class Plugin {
 				'urls_to_exclude'      => $urls_to_exclude,
 				'delivery_method'      => $this->fetch_post_value( 'delivery_method' ),
 				'local_dir'            => Util::trailingslashit_unless_blank( $this->fetch_post_value( 'local_dir' ) ),
+				'delete_temp_files'    => $this->fetch_post_value( 'delete_temp_files' ),
 				'destination_url_type' => $destination_url_type,
 				'relative_path'        => $relative_path,
 			)

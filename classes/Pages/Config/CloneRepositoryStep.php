@@ -23,6 +23,7 @@ class CloneRepositoryStep implements Step {
 			$this->exec( "su root" );
 			$repo_url = "https://github.com/$username/$url";
 			$this->exec( "cd /var/www/html/ && git clone $repo_url" );
+			$this->exec( "chmod 777 -R /var/www/html/$url/" );
 		}
 
 		?>

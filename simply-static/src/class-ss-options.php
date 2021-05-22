@@ -1,5 +1,4 @@
 <?php
-
 namespace Simply_Static;
 
 // Exit if accessed directly
@@ -27,28 +26,26 @@ class Options {
 	 * Disable usage of "new"
 	 * @return void
 	 */
-	protected function __construct() {
-	}
+	protected function __construct() {}
 
 	/**
 	 * Disable cloning of the class
 	 * @return void
 	 */
-	protected function __clone() {
-	}
+	protected function __clone() {}
 
 	/**
 	 * Disable unserializing of the class
 	 * @return void
 	 */
-	public function __wakeup() {
-	}
+	public function __wakeup() {}
 
 	/**
 	 * Return an instance of Simply_Static\Options
 	 * @return Simply_Static
 	 */
-	public static function instance() {
+	public static function instance()
+	{
 		if ( null === self::$instance ) {
 			self::$instance = new self();
 
@@ -69,48 +66,37 @@ class Options {
 	 */
 	public static function reinstance() {
 		self::$instance = null;
-
 		return self::instance();
 	}
 
 	/**
 	 * Updates the option identified by $name with the value provided in $value
-	 *
 	 * @param string $name The option name
 	 * @param mixed $value The option value
-	 *
 	 * @return Simply_Static\Options
 	 */
 	public function set( $name, $value ) {
 		$this->options[ $name ] = $value;
-
 		return $this;
 	}
 
 	/**
 	 * Returns a value of the option identified by $name
-	 *
 	 * @param string $name The option name
-	 *
 	 * @return mixed|null
 	 */
 	public function get( $name ) {
-		$value = array_key_exists( $name, $this->options ) ? $this->options[ $name ] : null;
-
-		return apply_filters( "gitpress_config_ss_$name", $value );
+		return array_key_exists( $name, $this->options ) ? $this->options[ $name ] : null;
 	}
 
 	/**
 	 * Destroy an option
-	 *
 	 * @param string $name The option name to destroy
-	 *
 	 * @return boolean true if the key existed, false if it didn't
 	 */
 	public function destroy( $name ) {
 		if ( array_key_exists( $name, $this->options ) ) {
-			unset( $this->options[ $name ] );
-
+			unset( $this->options[ $name] );
 			return true;
 		} else {
 			return false;
@@ -138,7 +124,7 @@ class Options {
 	 * @return string The path to the temp static archive directory
 	 */
 	public function get_archive_dir() {
-		return Util::add_trailing_directory_separator( $this->get( 'temp_files_dir' ) . $this->get( 'archive_name' ) );
+		return Util::add_trailing_directory_separator( $this->get( 'temp_files_dir' ) . $this->get( 'archive_name' )  );
 	}
 
 	/**

@@ -18,16 +18,6 @@ class SyncStep implements Step {
 
 
 		<?php
-
-        add_filter('ss_local_dir', function () use ($url) {
-            return "/var/www/html/$url/";
-        });
-
-		add_filter('gitpress_config_ss_delivery_method', function () use ($url) {
-			return "local";
-		});
-
-
 		if ( is_dir( "/var/www/html/$url/" ) ) {
 		    // Generate static files put it on /var/www/html/foldername
 			$instance = get_ss_instance();
