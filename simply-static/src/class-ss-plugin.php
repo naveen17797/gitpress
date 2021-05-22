@@ -83,11 +83,11 @@ class Plugin {
 			// Load the text domain for i18n
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 			// Enqueue admin styles
-			add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_styles' ) );
+			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_styles' ) );
 			// Enqueue admin scripts
-			add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_scripts' ) );
+			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'enqueue_admin_scripts' ) );
 			// Add the options page and menu item.
-			add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
+			//add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
 
 			// Handle AJAX requests
 
@@ -247,7 +247,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function static_archive_action() {
-		check_ajax_referer( 'simply-static_generate' );
+		//check_ajax_referer( 'simply-static_generate' );
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			die( __( 'Not permitted', 'simply-static' ) );
 		}

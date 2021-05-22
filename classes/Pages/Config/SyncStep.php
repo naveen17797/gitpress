@@ -16,7 +16,7 @@ class SyncStep implements Step {
 		?>
         <h3>Syncing site to  <?php echo $url; ?> </h3>
 
-
+        <div id="gitpress_log"></div>
 		<?php
 		if ( is_dir( "/var/www/html/$url/" ) ) {
 		}
