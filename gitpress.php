@@ -13,7 +13,7 @@ use Gitpress\AdminBar\AdminBar;
 
 use Gitpress\Notification\Notification;
 use Gitpress\Pages\Config\ConfigPage;
-
+require_once __DIR__ . "/simply-static/simply-static.php";
 
 
 add_action( 'init', function () {
@@ -65,7 +65,7 @@ add_action( 'init', function () {
 	new AdminBar();
 	new ConfigPage();
 
-	require_once __DIR__ . "/simply-static/simply-static.php";
+
 
 } );
 

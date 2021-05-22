@@ -51,13 +51,9 @@ class View {
 	 * Contructor - Performs initialization of the absolute path for views
 	 */
 	public function __construct() {
-		// Looking for a basic directory where plugin resides
-		list($plugin_dir) = explode( '/', plugin_basename( __FILE__ ) );
-
 		// create an absolute path to views directory
-		$path_array = array( WP_PLUGIN_DIR, $plugin_dir, self::DIRECTORY );
-
-		$this->path = implode( '/', $path_array );
+		$path_array = array( dirname(__DIR__), self::DIRECTORY );
+		$this->path = implode( '/', $path_array ) . "/";
 	}
 
 	/**

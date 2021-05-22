@@ -90,6 +90,7 @@ class Plugin {
 			add_action( 'admin_menu', array( self::$instance, 'add_plugin_admin_menu' ), 2 );
 
 			// Handle AJAX requests
+
 			add_action( 'wp_ajax_static_archive_action', array( self::$instance, 'static_archive_action' ) );
 			add_action( 'wp_ajax_render_export_log', array( self::$instance, 'render_export_log' ) );
 			add_action( 'wp_ajax_render_activity_log', array( self::$instance, 'render_activity_log' ) );
@@ -274,7 +275,6 @@ class Plugin {
 	public function send_json_response_for_static_archive( $action ) {
 		$done = $this->archive_creation_job->is_job_done();
 		$current_task = $this->archive_creation_job->get_current_task();
-
 		$activity_log_html = $this->view
 			->set_template( '_activity_log' )
 			->assign( 'status_messages', $this->options->get( 'archive_status_messages' ) )

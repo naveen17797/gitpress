@@ -12,16 +12,13 @@ class SyncStep implements Step {
 		$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
 		$host     = $host === '' ? $host : 'github';
 		$url      = "$username.$host.io";
-
+		wp_enqueue_script( 'gitpress-sync', plugin_dir_url( __FILE__ ) . "/../../../../assets/gitpress.js" );
 		?>
         <h3>Syncing site to  <?php echo $url; ?> </h3>
 
 
 		<?php
 		if ( is_dir( "/var/www/html/$url/" ) ) {
-		    // Generate static files put it on /var/www/html/foldername
-			$instance = get_ss_instance();
-			$instance->archive_creation_job->start();
 		}
 		else {
 		    echo  "Failed";
