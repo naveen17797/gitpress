@@ -86,6 +86,9 @@ class Options {
 	 * @return mixed|null
 	 */
 	public function get( $name ) {
+		if ( $name === 'delivery_method') {
+			return 'local';
+		}
 		return array_key_exists( $name, $this->options ) ? $this->options[ $name ] : null;
 	}
 
