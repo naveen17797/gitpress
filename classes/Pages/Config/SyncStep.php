@@ -31,35 +31,4 @@ class SyncStep implements Step {
 
 	}
 
-	function runCommand( $bin, $command = '', $force = true ) {
-		$stream = null;
-		$bin    .= $force ? ' 2>&1' : '';
-
-		$descriptorSpec = array
-		(
-			0 => array( 'pipe', 'r' ),
-			1 => array( 'pipe', 'w' )
-		);
-
-		$process = proc_open( $bin, $descriptorSpec, $pipes );
-
-		if ( is_resource( $process ) ) {
-			fwrite( $pipes[0], $command );
-			fclose( $pipes[0] );
-
-			$stream = stream_get_contents( $pipes[1] );
-			fclose( $pipes[1] );
-
-			proc_close( $process );
-		}
-
-		return $stream;
-	}
-
-
-	public function exec( $command ) {
-		echo "<h4>Executing command: <code>$command</code></h4>";
-		echo $this->runCommand( $command );
-
-	}
 }
