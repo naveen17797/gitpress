@@ -8,7 +8,6 @@ class SyncStep implements Step {
 	public function render_page() {
 
 		$username = get_field( 'git_username', "user_" . get_current_user_id() );
-		$password = get_field( 'git_password', "user_" . get_current_user_id() );
 		$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
 		$host     = $host === '' ? $host : 'github';
 		$url      = "$username.$host.io";
