@@ -57,6 +57,16 @@ function gitPressExecCommand( $bin, $command = '', $force = true ) {
 	return $stream;
 }
 
+/**
+ * Following is the sequence of actions which the client should call
+ *
+ * 1. Call ShouldDoSyncAction and verify if we have all credentials to do a sync, can_proceed_next_action.
+ * 2. Clone the repo and start the procedure.
+ * 3. Once the procedure ends then commit the changes
+ * 4. Call push action and end the sync.
+ */
+
+
 
 new CommitAction();
 

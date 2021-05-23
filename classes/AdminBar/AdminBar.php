@@ -2,6 +2,8 @@
 
 namespace Gitpress\AdminBar;
 
+use Gitpress\Data\Credentials;
+
 class AdminBar {
 
 	public function __construct() {
@@ -14,13 +16,19 @@ class AdminBar {
 			return;
 		}
 
+		$credentials = Credentials::get_instance();
 
-		$title = "<p class='gitpress-sync'>Gitpress Sync Stats : No changes detected</p>";
-		$href  = admin_url( 'admin.php?page=gitpress-config' );
-		if ( ! get_field( 'git_username', "user_" . get_current_user_id() )
-		     || ! get_field( 'git_password', "user_" . get_current_user_id() ) ) {
-			$title = "<p class='gitpress-sync gitpress-sync-warning'>Gitpress Sync Stats : Configuration required</p>";
+
+		$href = admin_url( 'admin.php?page=gitpress-config' );
+
+		if ( ! $credentials->username
+		     || ! $credentials->password ) {
+			$title = "<p class='gitpress-sync gitpress-sync-warning' id='gitpress_sync_button'>Gitpress Sync Stats : Configuration required</p>";
 			$href  = get_edit_profile_url();
+		} else {
+			$repo_name = $credentials->repo_name;
+			$title     = "<p class='gitpress-sync' id='gitpress_sync_button' >Gitpress : Sync my site to $repo_name</p>";
+			$href      = "#";
 		}
 
 		$admin_bar->add_menu( array(
@@ -36,6 +44,8 @@ class AdminBar {
 
 
 		wp_enqueue_style( 'gitpress-sync', plugin_dir_url( __FILE__ ) . "/../../../assets/gitpress.css" );
+		wp_enqueue_script( 'gitpress-sync', plugin_dir_url( __FILE__ ) . "/../../../assets/gitpress.js" );
+		wp_enqueue_script( 'gitpress-notify', plugin_dir_url( __FILE__ ) . "/../../../assets/notify.js", array( "jquery" ) );
 	}
 
 }

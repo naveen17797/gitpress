@@ -16,9 +16,8 @@ function gitPressSync(action = "static_archive_action") {
         method: "POST", body: formData
     }).then(response => response.json())
         .then(data => {
-            var message = data.activity_log_html
-            var log = document.getElementById("gitpress_log")
-            log.innerHTML = log.innerHTML + message
+            console.log(data.activity_log_html)
+
             if (data.done) {
                 clearInterval(gitPressSyncInterval)
                 gitPressCustomAction("gitpress_commit_changes").then(() => {
@@ -35,19 +34,23 @@ function gitPressCustomAction(action) {
     var formData = new FormData();
     formData.set("action", action)
 
-   return fetch(ajaxurl, {
+    return fetch(ajaxurl, {
         method: "POST", body: formData
     }).then(response => response.json())
         .then(data => {
             var message = data.data.activity_log_html
-            var log = document.getElementById("gitpress_log")
-            log.innerHTML = log.innerHTML + message
+            console.log(message)
             return Promise.resolve(message)
         })
 }
 
 
 window.addEventListener("load", function () {
-    gitPressSyncInterval = setInterval(gitPressSync, 3000)
+
+    document.getElementById("gitpress_sync_button").addEventListener("click", function () {
+        gitPressSyncInterval = setInterval(gitPressSync, 3000)
+    })
+
+    $.notify("Welcome to gitpress");
 
 })
