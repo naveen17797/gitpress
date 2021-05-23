@@ -46,11 +46,10 @@ function gitPressCustomAction(action) {
         .then(responseData => {
             var data = responseData.data
 
-            if ( data.can_run_next_action ) {
+            if (data.can_run_next_action) {
                 showMessageOnAdminBar(data.message, false)
                 return Promise.resolve(data.can_run_next_action)
-            }
-            else {
+            } else {
                 showMessageOnAdminBar(data.message, true)
                 return Promise.reject(data)
             }
@@ -60,15 +59,18 @@ function gitPressCustomAction(action) {
 
 window.addEventListener("load", function () {
 
-    document.getElementById("gitpress_sync_button").addEventListener("click", function () {
+    var syncButton = document.getElementById("gitpress_sync_button")
 
-        gitPressCustomAction("gitpress_should_do_sync")
-            .then(() => gitPressCustomAction("gitpress_clone_repo_action"))
-            .then(() => {
-                gitPressSyncInterval = setInterval(gitPressSync, 3000)
-            })
+    if (syncButton) {
+        syncButton.addEventListener("click", function () {
+            gitPressCustomAction("gitpress_should_do_sync")
+                .then(() => gitPressCustomAction("gitpress_clone_repo_action"))
+                .then(() => {
+                    gitPressSyncInterval = setInterval(gitPressSync, 3000)
+                })
 
 
-    })
+        })
+    }
 
 })
