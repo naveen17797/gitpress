@@ -30,7 +30,7 @@ add_action( 'init', function () {
 	new ConfigPage();
 } );
 
-function runCommand( $bin, $command = '', $force = true ) {
+function gitPressExecCommand( $bin, $command = '', $force = true ) {
 	$stream = null;
 	$bin    .= $force ? ' 2>&1' : '';
 
@@ -66,11 +66,11 @@ add_action( 'wp_ajax_gitpress_commit_changes', function () {
 
 	wp_send_json_success( array(
 		'activity_log_html' =>
-			  runCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
-			. runCommand( "git -C $dir config user.name $username" )
-			. runCommand( "git -C $dir config user.password $password" )
-			. runCommand( "git -C $dir add ." )
-			. runCommand( "cd $dir" ) . runCommand( "git -C $dir commit -am 'saving changes on $date'" )
+			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+			. gitPressExecCommand( "git -C $dir config user.name $username" )
+			. gitPressExecCommand( "git -C $dir config user.password $password" )
+			. gitPressExecCommand( "git -C $dir add ." )
+			. gitPressExecCommand( "cd $dir" ) . gitPressExecCommand( "git -C $dir commit -am 'saving changes on $date'" )
 	) );
 } );
 
@@ -84,12 +84,12 @@ add_action( 'wp_ajax_gitpress_push', function () {
 	$dir         = $credentials->dir_name;
 	wp_send_json_success( array(
 		'activity_log_html' =>
-			runCommand( "git -C $dir remote rm origin" ) .
-			runCommand( "git -C $dir remote add origin https://$password@$host.com/$username/$url" ) .
-			runCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
-			. runCommand( "git -C $dir config user.name $username" )
-			. runCommand( "git -C $dir config user.password $password" ) .
-			runCommand( "git -C $dir push origin master" )
+			gitPressExecCommand( "git -C $dir remote rm origin" ) .
+			gitPressExecCommand( "git -C $dir remote add origin https://$password@$host.com/$username/$url" ) .
+			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+			. gitPressExecCommand( "git -C $dir config user.name $username" )
+			. gitPressExecCommand( "git -C $dir config user.password $password" ) .
+			gitPressExecCommand( "git -C $dir push origin master" )
 	) );
 } );
 
