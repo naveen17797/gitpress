@@ -15,9 +15,14 @@ class CloneRepoAction extends Action {
 		$username    = $credentials->username;
 		$url         = $credentials->repo_name;
 		$repo_url    = "https://github.com/$username/$url";
-		$output      = gitPressExecCommand( "cd /var/www/html/ && git clone $repo_url" )
-		               . "\n" . gitPressExecCommand( "chmod 777 -R /var/www/html/$url/" );
 
+		if ( ! is_dir($credentials->dir_name)) {
+			$output = gitPressExecCommand( "cd /var/www/html/ && git clone $repo_url" )
+			          . "\n" . gitPressExecCommand( "chmod 777 -R /var/www/html/$url/" );
+		}
+		else {
+			$output = "Repo already cloned, proceeding to file generation";
+		}
 		return new ActionData(true, $output);
 	}
 }

@@ -14,10 +14,7 @@ use Gitpress\Actions\CommitAction;
 use Gitpress\Actions\PushAction;
 use Gitpress\Actions\ShouldDoSyncAction;
 use Gitpress\AdminBar\AdminBar;
-
-use Gitpress\Data\Credentials;
 use Gitpress\Notification\Notification;
-use Gitpress\Pages\Config\ConfigPage;
 
 require_once __DIR__ . "/simply-static/simply-static.php";
 
@@ -31,7 +28,6 @@ require_once __DIR__ . "/autoloader.php";
 add_action( 'init', function () {
 	new Notification();
 	new AdminBar();
-	new ConfigPage();
 } );
 
 function gitPressExecCommand( $bin, $command = '', $force = true ) {

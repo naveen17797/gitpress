@@ -23,7 +23,7 @@ function gitPressSync(action = "static_archive_action") {
                 gitPressCustomAction("gitpress_commit_changes")
                     .then(() => gitPressCustomAction("gitpress_push"))
                     .then(() => {
-                        showMessageOnAdminBar("Start Sync");
+                        showMessageOnAdminBar("Sync completed, Click to start again");
                     })
 
             }
