@@ -18,14 +18,15 @@ class PushAction extends Action {
 		$host        = $credentials->host;
 		$url         = $credentials->repo_name;
 		$dir         = $credentials->dir_name;
-		wp_send_json_success( array(
-			'activity_log_html' =>
-				gitPressExecCommand( "git -C $dir remote rm origin" ) .
-				gitPressExecCommand( "git -C $dir remote add origin https://$password@$host.com/$username/$url" ) .
-				gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
-				. gitPressExecCommand( "git -C $dir config user.name $username" )
-				. gitPressExecCommand( "git -C $dir config user.password $password" ) .
-				gitPressExecCommand( "git -C $dir push origin master" )
-		) );
+
+		return new ActionData(
+			true,
+			gitPressExecCommand( "git -C $dir remote rm origin" ) .
+			gitPressExecCommand( "git -C $dir remote add origin https://$password@$host.com/$username/$url" ) .
+			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+			. gitPressExecCommand( "git -C $dir config user.name $username" )
+			. gitPressExecCommand( "git -C $dir config user.password $password" ) .
+			gitPressExecCommand( "git -C $dir push origin master" )
+		);
 	}
 }

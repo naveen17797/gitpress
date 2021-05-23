@@ -1,4 +1,5 @@
 <?php
+
 namespace Gitpress\Actions;
 
 use Gitpress\Data\Credentials;
@@ -17,14 +18,12 @@ class CommitAction extends Action {
 		$dir         = $credentials->dir_name;
 		$date        = date( 'Y-m-d h:i:s' );
 
-
-		wp_send_json_success( array(
-			'activity_log_html' =>
-				gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
-				. gitPressExecCommand( "git -C $dir config user.name $username" )
-				. gitPressExecCommand( "git -C $dir config user.password $password" )
-				. gitPressExecCommand( "git -C $dir add ." )
-				. gitPressExecCommand( "cd $dir" ) . gitPressExecCommand( "git -C $dir commit -am 'saving changes on $date'" )
-		) );
+		return new ActionData( true,
+			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+			. gitPressExecCommand( "git -C $dir config user.name $username" )
+			. gitPressExecCommand( "git -C $dir config user.password $password" )
+			. gitPressExecCommand( "git -C $dir add ." )
+			. gitPressExecCommand( "cd $dir" ) . gitPressExecCommand( "git -C $dir commit -am 'saving changes on $date'" )
+		);
 	}
 }

@@ -38,9 +38,9 @@ function gitPressCustomAction(action) {
         method: "POST", body: formData
     }).then(response => response.json())
         .then(data => {
-            var message = data.data.activity_log_html
-            console.log(message)
-            return Promise.resolve(message)
+            var data = data.data
+            console.log(data.message)
+            return Promise.resolve(data.can_run_next_action)
         })
 }
 
@@ -50,7 +50,5 @@ window.addEventListener("load", function () {
     document.getElementById("gitpress_sync_button").addEventListener("click", function () {
         gitPressSyncInterval = setInterval(gitPressSync, 3000)
     })
-
-    $.notify("Welcome to gitpress");
 
 })
