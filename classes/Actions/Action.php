@@ -15,10 +15,7 @@ abstract class Action {
 	abstract function get_action_slug();
 
 	/**
-	 * @return array(
-	 * 'message' => string,
-	 * 'is_sync_complete' => boolean
-	 * )
+	 * @return ActionData
 	 */
 	abstract function handle_action();
 

@@ -27,7 +27,7 @@ class AdminBar {
 			$href  = get_edit_profile_url();
 		} else {
 			$repo_name = $credentials->repo_name;
-			$title     = "<p class='gitpress-sync' id='gitpress_sync_button' >Gitpress : Sync my site to $repo_name</p>";
+			$title     = "<p class='gitpress-sync' id='gitpress_sync_button' >Gitpress : Sync $repo_name</p>";
 			$href      = "#";
 		}
 
@@ -45,7 +45,7 @@ class AdminBar {
 
 		wp_enqueue_style( 'gitpress-sync', plugin_dir_url( __FILE__ ) . "/../../../assets/gitpress.css" );
 		wp_enqueue_script( 'gitpress-sync', plugin_dir_url( __FILE__ ) . "/../../../assets/gitpress.js" );
-		wp_enqueue_script( 'gitpress-notify', plugin_dir_url( __FILE__ ) . "/../../../assets/notify.js", array( "jquery" ) );
+
 	}
 
 }

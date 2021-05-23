@@ -11,6 +11,7 @@ License: GPL2
 
 use Gitpress\Actions\CommitAction;
 use Gitpress\Actions\PushAction;
+use Gitpress\Actions\ShouldDoSyncAction;
 use Gitpress\AdminBar\AdminBar;
 
 use Gitpress\Data\Credentials;
@@ -67,8 +68,7 @@ function gitPressExecCommand( $bin, $command = '', $force = true ) {
  */
 
 
-
+new ShouldDoSyncAction();
 new CommitAction();
-
 new PushAction();
 

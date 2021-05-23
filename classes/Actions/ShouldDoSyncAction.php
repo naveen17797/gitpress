@@ -1,6 +1,8 @@
 <?php
 namespace Gitpress\Actions;
 
+use Gitpress\Data\Credentials;
+
 class ShouldDoSyncAction extends Action {
 
 	function get_action_slug() {
@@ -9,7 +11,12 @@ class ShouldDoSyncAction extends Action {
 
 	function handle_action() {
 
-		wp_send_json_success();
+		$credentials = Credentials::get_instance();
+		$response = wp_remote_get( "https://api.github.com/repos/$credentials->username/$credentials->username.github.io" );
+		wp_send_json_success(array(
+
+
+		));
 
 	}
 }
