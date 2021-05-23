@@ -27,25 +27,9 @@ require_once __DIR__ . "/autoloader.php";
 
 
 add_action( 'init', function () {
-
-	$username = get_field( 'git_username', "user_" . get_current_user_id() );
-	$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
-	$host     = $host === '' ? $host : 'github';
-	$url      = "$username.$host.io";
-
-	add_filter( 'ss_local_dir', function () use ( $url ) {
-		return "/var/www/html/$url/";
-	} );
-
-	add_filter( 'gitpress_config_ss_delivery_method', function () use ( $url ) {
-		return "local";
-	} );
-
 	new Notification();
 	new AdminBar();
 	new ConfigPage();
-
-
 } );
 
 function runCommand( $bin, $command = '', $force = true ) {
