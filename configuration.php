@@ -26,7 +26,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ):
 			),
 			array(
 				'key'               => 'field_60a5b564cc9af',
-				'label'             => 'Github / Gitlab password',
+				'label'             => 'Github / Gitlab password ( use accesstoken if you enabled 2FA)',
 				'name'              => 'git_password',
 				'type'              => 'password',
 				'instructions'      => 'Password for github or gitlab ( dont worry, this data is stored locally, no one can access it except you )',
