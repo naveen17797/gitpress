@@ -11,6 +11,7 @@ License: GPL2
 
 use Gitpress\AdminBar\AdminBar;
 
+use Gitpress\Data\Credentials;
 use Gitpress\Notification\Notification;
 use Gitpress\Pages\Config\ConfigPage;
 
@@ -74,13 +75,11 @@ function runCommand( $bin, $command = '', $force = true ) {
 
 
 add_action( 'wp_ajax_gitpress_commit_changes', function () {
-	$username = get_field( 'git_username', "user_" . get_current_user_id() );
-	$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
-	$password = get_field( 'git_password', "user_" . get_current_user_id() );
-	$host     = $host === '' ? $host : 'github';
-	$url      = "$username.$host.io";
-	$dir      = "/var/www/html/$url/";
-	$date     = date( 'Y-m-d h:i:s' );
+	$credentials = Credentials::get_instance();
+	$username    = $credentials->username;
+	$password    = $credentials->password;
+	$dir         = $credentials->dir_name;
+	$date        = date( 'Y-m-d h:i:s' );
 
 
 	wp_send_json_success( array(
@@ -94,12 +93,12 @@ add_action( 'wp_ajax_gitpress_commit_changes', function () {
 
 
 add_action( 'wp_ajax_gitpress_push', function () {
-	$username = get_field( 'git_username', "user_" . get_current_user_id() );
-	$password = get_field( 'git_password', "user_" . get_current_user_id() );
-	$host     = get_field( 'hosting_site', "user_" . get_current_user_id() );
-	$host     = $host === '' ? $host : 'github';
-	$url      = "$username.$host.io";
-	$dir      = "/var/www/html/$url/";
+	$credentials = Credentials::get_instance();
+	$username    = $credentials->username;
+	$password    = $credentials->password;
+	$host        = $credentials->host;
+	$url         = $credentials->repo_name;
+	$dir         = $credentials->dir_name;
 	wp_send_json_success( array(
 		'activity_log_html' =>
 			runCommand( "git -C $dir remote rm origin" ) .

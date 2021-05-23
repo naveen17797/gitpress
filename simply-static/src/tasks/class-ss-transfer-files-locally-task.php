@@ -1,5 +1,8 @@
 <?php
+
 namespace Simply_Static;
+
+use Gitpress\Data\Credentials;
 
 /**
  * Class which handles transfer files task.
@@ -20,13 +23,8 @@ class Transfer_Files_Locally_Task extends Task {
 	 * @return boolean true if done, false if not done.
 	 */
 	public function perform() {
-		$local_dir = $this->options->get( 'local_dir' );
-		// God wont forgive me for this.
-		$username = get_field( 'git_username', "user_1" );
-		$host     = get_field( 'hosting_site', "user_1" );
-		$host     = $host === '' ? $host : 'github';
-		$url      = "$username.$host.io";
-		$local_dir =  "/var/www/html/$url/";
+		$credentials = Credentials::get_instance();
+		$local_dir   = $credentials->dir_name;
 
 		list( $pages_processed, $total_pages ) = $this->copy_static_files( $local_dir );
 
@@ -38,7 +36,7 @@ class Transfer_Files_Locally_Task extends Task {
 		if ( $pages_processed >= $total_pages ) {
 			if ( $this->options->get( 'destination_url_type' ) == 'absolute' ) {
 				$destination_url = trailingslashit( $this->options->get_destination_url() );
-				$message = __( 'Destination URL:', 'simply-static' ) . ' <a href="' . $destination_url .'" target="_blank">' . $destination_url . '</a>';
+				$message         = __( 'Destination URL:', 'simply-static' ) . ' <a href="' . $destination_url . '" target="_blank">' . $destination_url . '</a>';
 				$this->save_status_message( $message, 'destination_url' );
 			}
 		}
@@ -52,51 +50,52 @@ class Transfer_Files_Locally_Task extends Task {
 	 * Copy temporary static files to a local directory.
 	 *
 	 * @param string $destination_dir The directory to put the files..
+	 *
 	 * @return array
 	 */
 	public function copy_static_files( $destination_dir ) {
 		$batch_size = apply_filters( 'simply_static_copy_files_batch_size', 100 );
 
-		$archive_dir = $this->options->get_archive_dir();
+		$archive_dir        = $this->options->get_archive_dir();
 		$archive_start_time = $this->options->get( 'archive_start_time' );
 
 		// TODO: also check for recent modification time
 		// last_modified_at > ? AND
-		$static_pages = Page::query()
-			->where( "file_path IS NOT NULL" )
-			->where( "file_path != ''" )
+		$static_pages    = Page::query()
+		                       ->where( "file_path IS NOT NULL" )
+		                       ->where( "file_path != ''" )
 //			->where( "( last_transferred_at < ? OR last_transferred_at IS NULL )", $archive_start_time )
-			->limit( $batch_size )
-			->find();
+                               ->limit( $batch_size )
+		                       ->find();
 		$pages_remaining = count( $static_pages );
-		$total_pages = Page::query()
-			->where( "file_path IS NOT NULL" )
-			->where( "file_path != ''" )
-			->count();
+		$total_pages     = Page::query()
+		                       ->where( "file_path IS NOT NULL" )
+		                       ->where( "file_path != ''" )
+		                       ->count();
 		$pages_processed = $total_pages - $pages_remaining;
 		Util::debug_log( "Total pages: " . $total_pages . '; Pages remaining: ' . $pages_remaining );
 
 		$total_pages = array();
 		while ( $static_page = array_shift( $static_pages ) ) {
-			$path_info = Util::url_path_info( $static_page->file_path );
-			$path = $destination_dir . $path_info['dirname'];
+			$path_info  = Util::url_path_info( $static_page->file_path );
+			$path       = $destination_dir . $path_info['dirname'];
 			$create_dir = wp_mkdir_p( $path );
 			if ( $create_dir === false ) {
 				Util::debug_log( "Cannot create directory: " . $destination_dir . $path_info['dirname'] );
 				$static_page->set_error_message( 'Unable to create destination directory' );
 			} else {
 				chmod( $path, 0755 );
-				$origin_file_path = $archive_dir . $static_page->file_path;
+				$origin_file_path      = $archive_dir . $static_page->file_path;
 				$destination_file_path = $destination_dir . $static_page->file_path;
-				$total_pages[] = $destination_file_path;
+				$total_pages[]         = $destination_file_path;
 				// check that destination file doesn't exist OR exists but is writeable
-				if ( file_exists($destination_file_path) ) {
-					unlink($destination_file_path);
+				if ( file_exists( $destination_file_path ) ) {
+					unlink( $destination_file_path );
 				}
 				if ( ! file_exists( $destination_file_path ) || is_writable( $destination_file_path ) ) {
 					$copy = copy( $origin_file_path, $destination_file_path );
 					if ( $copy === false ) {
-						Util::debug_log( "Cannot copy " . $origin_file_path .  " to " . $destination_file_path );
+						Util::debug_log( "Cannot copy " . $origin_file_path . " to " . $destination_file_path );
 						$static_page->set_error_message( 'Unable to copy file to destination' );
 					}
 				} else {
@@ -106,12 +105,11 @@ class Transfer_Files_Locally_Task extends Task {
 			}
 
 
-
 			$static_page->last_transferred_at = Util::formatted_datetime();
 			$static_page->save();
 		}
 
-		return array( $pages_processed, join(",", $total_pages) );
+		return array( $pages_processed, join( ",", $total_pages ) );
 	}
 
 }
