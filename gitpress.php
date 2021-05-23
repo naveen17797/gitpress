@@ -9,6 +9,8 @@ Author URI: http://github.com/naveen17797/
 License: GPL2
 */
 
+use Gitpress\Actions\CommitAction;
+use Gitpress\Actions\PushAction;
 use Gitpress\AdminBar\AdminBar;
 
 use Gitpress\Data\Credentials;
@@ -56,40 +58,7 @@ function gitPressExecCommand( $bin, $command = '', $force = true ) {
 }
 
 
-add_action( 'wp_ajax_gitpress_commit_changes', function () {
-	$credentials = Credentials::get_instance();
-	$username    = $credentials->username;
-	$password    = $credentials->password;
-	$dir         = $credentials->dir_name;
-	$date        = date( 'Y-m-d h:i:s' );
+new CommitAction();
 
-
-	wp_send_json_success( array(
-		'activity_log_html' =>
-			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
-			. gitPressExecCommand( "git -C $dir config user.name $username" )
-			. gitPressExecCommand( "git -C $dir config user.password $password" )
-			. gitPressExecCommand( "git -C $dir add ." )
-			. gitPressExecCommand( "cd $dir" ) . gitPressExecCommand( "git -C $dir commit -am 'saving changes on $date'" )
-	) );
-} );
-
-
-add_action( 'wp_ajax_gitpress_push', function () {
-	$credentials = Credentials::get_instance();
-	$username    = $credentials->username;
-	$password    = $credentials->password;
-	$host        = $credentials->host;
-	$url         = $credentials->repo_name;
-	$dir         = $credentials->dir_name;
-	wp_send_json_success( array(
-		'activity_log_html' =>
-			gitPressExecCommand( "git -C $dir remote rm origin" ) .
-			gitPressExecCommand( "git -C $dir remote add origin https://$password@$host.com/$username/$url" ) .
-			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
-			. gitPressExecCommand( "git -C $dir config user.name $username" )
-			. gitPressExecCommand( "git -C $dir config user.password $password" ) .
-			gitPressExecCommand( "git -C $dir push origin master" )
-	) );
-} );
+new PushAction();
 
