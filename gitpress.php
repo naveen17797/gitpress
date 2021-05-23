@@ -9,6 +9,7 @@ Author URI: http://github.com/naveen17797/
 License: GPL2
 */
 
+use Gitpress\Actions\CloneRepoAction;
 use Gitpress\Actions\CommitAction;
 use Gitpress\Actions\PushAction;
 use Gitpress\Actions\ShouldDoSyncAction;
@@ -69,6 +70,7 @@ function gitPressExecCommand( $bin, $command = '', $force = true ) {
 
 
 new ShouldDoSyncAction();
+new CloneRepoAction();
 new CommitAction();
 new PushAction();
 

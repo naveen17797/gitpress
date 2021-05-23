@@ -16,13 +16,15 @@ function gitPressSync(action = "static_archive_action") {
         method: "POST", body: formData
     }).then(response => response.json())
         .then(data => {
-            console.log(data.activity_log_html)
+            showMessageOnAdminBar(data.activity_log_html, false)
 
             if (data.done) {
                 clearInterval(gitPressSyncInterval)
-                gitPressCustomAction("gitpress_commit_changes").then(() => {
-                    gitPressCustomAction("gitpress_push")
-                })
+                gitPressCustomAction("gitpress_commit_changes")
+                    .then(() => gitPressCustomAction("gitpress_push"))
+                    .then(() => {
+                        showMessageOnAdminBar("Start Sync");
+                    })
 
             }
 
@@ -30,17 +32,28 @@ function gitPressSync(action = "static_archive_action") {
 }
 
 
+function showMessageOnAdminBar(message, isError) {
+    var adminBarArea = document.getElementById("gitpress_sync_button")
+    adminBarArea.innerText = message
+}
+
 function gitPressCustomAction(action) {
     var formData = new FormData();
     formData.set("action", action)
-
     return fetch(ajaxurl, {
         method: "POST", body: formData
     }).then(response => response.json())
-        .then(data => {
-            var data = data.data
-            console.log(data.message)
-            return Promise.resolve(data.can_run_next_action)
+        .then(responseData => {
+            var data = responseData.data
+
+            if ( data.can_run_next_action ) {
+                showMessageOnAdminBar(data.message, false)
+                return Promise.resolve(data.can_run_next_action)
+            }
+            else {
+                showMessageOnAdminBar(data.message, true)
+                return Promise.reject(data)
+            }
         })
 }
 
@@ -48,7 +61,14 @@ function gitPressCustomAction(action) {
 window.addEventListener("load", function () {
 
     document.getElementById("gitpress_sync_button").addEventListener("click", function () {
-        gitPressSyncInterval = setInterval(gitPressSync, 3000)
+
+        gitPressCustomAction("gitpress_should_do_sync")
+            .then(() => gitPressCustomAction("gitpress_clone_repo_action"))
+            .then(() => {
+                gitPressSyncInterval = setInterval(gitPressSync, 3000)
+            })
+
+
     })
 
 })

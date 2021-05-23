@@ -7,7 +7,7 @@ use Gitpress\Data\Credentials;
 class CloneRepoAction extends Action {
 
 	function get_action_slug() {
-		return "clone_repo_action";
+		return "gitpress_clone_repo_action";
 	}
 
 	function handle_action() {
@@ -18,9 +18,6 @@ class CloneRepoAction extends Action {
 		$output      = gitPressExecCommand( "cd /var/www/html/ && git clone $repo_url" )
 		               . "\n" . gitPressExecCommand( "chmod 777 -R /var/www/html/$url/" );
 
-		wp_send_json_success( array(
-			'message'          => $output,
-			'is_sync_complete' => false
-		) );
+		return new ActionData(true, $output);
 	}
 }
