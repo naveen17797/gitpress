@@ -90,6 +90,9 @@ class Transfer_Files_Locally_Task extends Task {
 				$destination_file_path = $destination_dir . $static_page->file_path;
 				$total_pages[] = $destination_file_path;
 				// check that destination file doesn't exist OR exists but is writeable
+				if ( file_exists($destination_file_path) ) {
+					unlink($destination_file_path);
+				}
 				if ( ! file_exists( $destination_file_path ) || is_writable( $destination_file_path ) ) {
 					$copy = copy( $origin_file_path, $destination_file_path );
 					if ( $copy === false ) {
