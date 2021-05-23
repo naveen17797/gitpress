@@ -22,9 +22,7 @@ add_action( 'init', function () {
 	require_once __DIR__ . '/configuration.php';
 } );
 
-
 require_once __DIR__ . "/autoloader.php";
-
 
 add_action( 'init', function () {
 	new Notification();
@@ -67,11 +65,12 @@ add_action( 'wp_ajax_gitpress_commit_changes', function () {
 
 
 	wp_send_json_success( array(
-		'activity_log_html' => $dir . runCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
-		                       . runCommand( "git -C $dir config user.name $username" )
-		                       . runCommand( "git -C $dir config user.password $password" )
-		                       . runCommand( "git -C $dir add ." )
-		                       . runCommand( "cd $dir" ) . runCommand( "git -C $dir commit -am 'saving changes on $date'" )
+		'activity_log_html' =>
+			  runCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+			. runCommand( "git -C $dir config user.name $username" )
+			. runCommand( "git -C $dir config user.password $password" )
+			. runCommand( "git -C $dir add ." )
+			. runCommand( "cd $dir" ) . runCommand( "git -C $dir commit -am 'saving changes on $date'" )
 	) );
 } );
 
