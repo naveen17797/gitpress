@@ -6,7 +6,7 @@ This helps to host your wordpress site in github pages
 
 ## How does it do it ?
 1. It runs wordpress on your local docker container
-2. It generates static files with the help of the plugin simply static
+2. It generates static files with the help of the plugin [simply static](https://github.com/patrickposner/simply-static) written by [Patrick Posner](https://patrickposner.dev/)
 3. It pushes all the static files to your github pages
 
 ## How can i install ?
