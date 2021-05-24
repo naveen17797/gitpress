@@ -1,4 +1,5 @@
 # Gitpress
+Run wordpress directly on github pages
 
 ## What does this repo do ?
 This helps to host your wordpress site in github pages
