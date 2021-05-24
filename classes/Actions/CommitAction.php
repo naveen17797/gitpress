@@ -19,7 +19,7 @@ class CommitAction extends Action {
 		$date        = date( 'Y-m-d h:i:s' );
 
 		return new ActionData( true,
-			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+			gitPressExecCommand( "git -C $dir config user.email gitpress@gmail.com" )
 			. gitPressExecCommand( "git -C $dir config user.name $username" )
 			. gitPressExecCommand( "git -C $dir config user.password $password" )
 			. gitPressExecCommand( "git -C $dir add ." )

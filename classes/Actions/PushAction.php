@@ -23,7 +23,7 @@ class PushAction extends Action {
 			true,
 			gitPressExecCommand( "git -C $dir remote rm origin" ) .
 			gitPressExecCommand( "git -C $dir remote add origin https://$password@$host.com/$username/$url" ) .
-			gitPressExecCommand( "git -C $dir config user.email kmnaveen101@gmail.com" )
+			gitPressExecCommand( "git -C $dir config user.email gitpress@gmail.com" )
 			. gitPressExecCommand( "git -C $dir config user.name $username" )
 			. gitPressExecCommand( "git -C $dir config user.password $password" ) .
 			gitPressExecCommand( "git -C $dir push origin master" )

@@ -19,6 +19,7 @@ services:
       - db
     volumes:
       - ./:/var/www/html/wp-content/plugins/gitpress
+      - ./wp-config.php:/var/www/html/wp-config.php
     environment:
       WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: wordpress
