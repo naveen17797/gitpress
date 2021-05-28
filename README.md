@@ -22,4 +22,4 @@ This helps to host your wordpress site in github pages
 6. Now do that every time when you want to sync your local site to github pages.
 
 ## Can i use it in my production environment ?
-This is safe to run inside a local container.
+No
