@@ -26,6 +26,10 @@ class Credentials {
 
 
 	public static function get_instance() {
+
+		if ( ! function_exists('get_field') ) {
+			return null;
+		}
 		if ( self::$instance ) {
 			return self::$instance;
 		}

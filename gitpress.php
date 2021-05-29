@@ -15,6 +15,7 @@ use Gitpress\Actions\PushAction;
 use Gitpress\Actions\ShouldDoSyncAction;
 use Gitpress\AdminBar\AdminBar;
 use Gitpress\Notification\Notification;
+use Gitpress\Options\AdminOption;
 
 require_once __DIR__ . "/simply-static/simply-static.php";
 
@@ -69,4 +70,4 @@ new ShouldDoSyncAction();
 new CloneRepoAction();
 new CommitAction();
 new PushAction();
-
+new AdminOption();
