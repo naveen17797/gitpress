@@ -1,6 +1,9 @@
 # Gitpress
 Run wordpress directly on github pages
 
+## Gitpress won the innovation award for may 2021
+Read more about this [https://naveen17797.github.io/gitpress-won-the-php-innovation-award/](here)
+
 ## Want to see live demo ? 
 Go to my github pages site at [https://naveen17797.github.io/](https://naveen17797.github.io/)
 
