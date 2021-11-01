@@ -12,14 +12,15 @@ services:
       MYSQL_PASSWORD: password
 
   wordpress:
-    image: naveen17797/gitpress:0.3.0
+    image: naveen17797/gitpress:0.3.6
     ports:
       - 80:80
     depends_on:
       - db
     volumes:
-      - ./:/var/www/html/wp-content/mu-plugins/gitpress
-      - ./wp-config.php:/var/www/html/wp-config.php
+      - ./plugin/:/var/www/html/wp-content/mu-plugins/gitpress
+      - ./plugin/wp-config.php:/var/www/html/wp-config.php
+      - ./gitpress-backup:/home/gitpress-backup/
     environment:
       WORDPRESS_DB_HOST: localhost
       WORDPRESS_DB_USER: wordpress
