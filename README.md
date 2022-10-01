@@ -24,5 +24,17 @@ This helps to host your wordpress site in github pages
 ![2021-05-24_05-58](https://user-images.githubusercontent.com/18109258/119281888-1a096f00-bc55-11eb-9ea8-495ee09682e7.png)
 6. Now do that every time when you want to sync your local site to github pages.
 
+## I want to backup my database
+
+1. Stop the db container
+2. Run `docker-compose stop db`
+3. Run `docker-compose run --rm db-backup`
+4. This will backup your database to backup folder.
+
+## I want to restore my backup
+1. Run `docker-compose run --rm db-restore`
+2. This will restore your backup.
+
+
 ## Can i use it in my production environment ?
 No
