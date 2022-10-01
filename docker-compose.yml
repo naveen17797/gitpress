@@ -27,24 +27,24 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DEBUG: 1
 
-  db-backup:
-    image: alpine
-    tty: false
-    environment:
-      - TARGET=db-data-5.5.0
-    volumes:
-      - ./backup:/backup
-      - db-data-5.5.0:/volume
-    command: sh -c "tar -cjf /backup/$${TARGET}.tar.bz2 -C /volume ./"
-
-  db-restore:
-    image: alpine
-    environment:
-      - SOURCE=db-data-5.5.0
-    volumes:
-      - ./backup:/backup
-      - db-data-5.5.0:/volume
-    command: sh -c "rm -rf /volume/* /volume/..?* /volume/.[!.]* ; tar -C /volume/ -xjf /backup/$${SOURCE}.tar.bz2"
+#  db-backup:
+#    image: alpine
+#    tty: false
+#    environment:
+#      - TARGET=db-data-5.5.0
+#    volumes:
+#      - ./backup:/backup
+#      - db-data-5.5.0:/volume
+#    command: sh -c "tar -cjf /backup/$${TARGET}.tar.bz2 -C /volume ./"
+#
+#  db-restore:
+#    image: alpine
+#    environment:
+#      - SOURCE=db-data-5.5.0
+#    volumes:
+#      - ./backup:/backup
+#      - db-data-5.5.0:/volume
+#    command: sh -c "rm -rf /volume/* /volume/..?* /volume/.[!.]* ; tar -C /volume/ -xjf /backup/$${SOURCE}.tar.bz2"
 
 volumes:
   db-data-5.5.0:
